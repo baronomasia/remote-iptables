@@ -1,0 +1,18 @@
+{
+  "name": "package.json",
+  "version": "1.0.0",
+  "description": "Remote iptables management command line tool",
+  "main": "ript.js",
+  "scripts": {
+    "test": "node ript.js -h"
+  },
+  "author": "Ryan Staatz",
+  "license": "MIT",
+  "dependencies": {
+    "minimist": "^1.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/baronomasia/remote-iptables"
+  }
+}
