@@ -5,7 +5,7 @@ An iptables remote management tool.
 #### Requirements
 
 * Node.js
-* diff, grep, iptables, printf, ssh
+* iptables and ssh
 
 #### Installation
 
@@ -17,28 +17,42 @@ npm install
 
 #### Usage
 
-Usage: node ript.js [-i identity_file] [-p port] command ...
+Usage: node ript.js command ...
 
-Export the iptables policy of a remote server to a local file
- 
-    node ript.js -e user@remotehost -f local_file -i identity_file
- 
-Apply an iptables policy to a group of host addresses;
-  list host addresses separated by a carriage return in a file
+  Import server entries from a local file  
+  For each entry list hostname ip then groups - separated by spaces  
+  Separate each server entry by a carriage return  
 
-    node ript.js -a policy_file -g group_file -l user -i identity_file
+    node ript.js -m local_file
+
+  Assign a security group to all servers matching a particular hostname  
+  Create groups files in the security-groups directory  
+  Each line of the group file is an iptables command (e.g. -P INPUT DROP)  
+  When prompted for a result number use * to select all
+
+    node ript.js -a groupname
+
+  Delete a server entry with a particular hostname
+
+    node ript.js -d hostname
+
+  Update iptables for all server entries with a particular group  
+  When prompted for a result number use * to select all
+
+    node ript.js -u groupname -l ssh-username -i ssh-identityfile
 
 options  
-&nbsp;&nbsp;-a &nbsp;&nbsp;apply an iptables policy to a group of servers, requires -g, -l  
-&nbsp;&nbsp;-e &nbsp;&nbsp;export the iptables of a remote server to a local file  
-&nbsp;&nbsp;-f &nbsp;&nbsp;optionally specify the exported iptables filename (-e only)  
-&nbsp;&nbsp;-g &nbsp;&nbsp;specify the file containing the group of servers, required for -a  
-&nbsp;&nbsp;-h &nbsp;&nbsp;display these usage options and exit  
-&nbsp;&nbsp;-l &nbsp;&nbsp;specify the ssh username for a group of servers, required for -a  
-&nbsp;&nbsp;-v &nbsp;&nbsp;optionally enable verbose mode  
-&nbsp;&nbsp;-w &nbsp;&nbsp;optionally whitelist a group of servers (filename, -a only)
+  -a --assign&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;assign a securiy group to server entries  
+  -c --create&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;create a new server entry  
+  -d --delete&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;delete a server entry  
+  -e --edit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;edit a server entry  
+  -m --import&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;import server entries from a file (optional -o flag)  
+  -o --overwrite&nbsp;&nbsp;overwrite all server entries on import (-m only)  
+  -r --remove&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;remove a security group from server entries  
+  -s --show&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;show server entries  
+  -u --update&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;update server entries iptables via ssh  
 
-ssh options (options passed directly to ssh)  
+ssh options (options passed directly to ssh, -u only)  
 &nbsp;&nbsp;-i &nbsp;&nbsp;specify a private key identity file  
-&nbsp;&nbsp;-p &nbsp;&nbsp;specify a port
-  
+&nbsp;&nbsp;-l &nbsp;&nbsp;specify a user  
+&nbsp;&nbsp;-p &nbsp;&nbsp;specify a port  
